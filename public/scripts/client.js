@@ -25,6 +25,7 @@ two HTTP methods for simplicity. Oddly, there is no $.put or $.delete in
 jQuery, so I'm still using $.ajax for those. */
 
 $(document).ready(function(){
+  $('#check-if-ok').hide();
   refreshDisplay();
 });
 
@@ -43,11 +44,21 @@ $(document).on('click', '.delete-task', function(){
   DELETE to remove the to-do from the database, and then refreshes to-do list
   on the DOM. */
   var toDeleteID = $(this).data('id');
-  var deleteTask = $.ajax('/todos/deleteToDo', {
-    data: {id: toDeleteID},
-    method: 'DELETE'
+  var $rowToBeDeleted = $(this).parent().parent();
+  $rowToBeDeleted.addClass('row-to-be-deleted');
+  $('#check-if-ok').show();
+  $('#yes-ok').on('click', function(){
+    var deleteTask = $.ajax('/todos/deleteToDo', {
+      data: {id: toDeleteID},
+      method: 'DELETE'
+    });
+    $.when(deleteTask).done(refreshDisplay);
+    $('#check-if-ok').hide();
   });
-  $.when(deleteTask).done(refreshDisplay);
+  $('#not-ok').on('click', function(){
+    $('#check-if-ok').hide();
+      $rowToBeDeleted.removeClass('row-to-be-deleted');
+  });
 });
 
 $(document).on('click', '.complete-task', function(){
@@ -85,16 +96,15 @@ var displayToDos = function(responseOfGet){
   (from the time the to-do is created). */
   var todos = responseOfGet.toDoArray;
   // Header row:
-  var tableText = '<tr class="header-row"><th class="complete-column"></th><th class="delete-column"></th><th class="taskname-column">Task</th></tr>';
-  var completedText = '';
+  var tableText = '', completedText = '';
   // For loop steps backwards to do reverse chronology.
   for (var i = (todos.length - 1); i >= 0; i--) {
     if (todos[i].complete) {
       // If task is already completed, it's added to the list of completed tasks.
-      completedText += '<tr class="completed-row"><td class="complete-column">&#10004;</td><td><button type="button" class="delete-task" data-id="' + todos[i].id + '">delete</button></td><td>' + todos[i].task + '</td></tr>';
+      completedText += '<tr class="completed-row"><td class="complete-column">&#10004;</td><td class="delete-column"><button type="button" class="delete-task" data-id="' + todos[i].id + '">delete</button></td><td class="taskname-column">' + todos[i].task + '</td></tr>';
     } else {
       // Otherwise, the task is incomplete, and added to the other list.
-      tableText += '<tr class="incomplete-row"><td><button type="button" class="complete-task" data-id="' + todos[i].id + '">complete</button></td><td><button type="button" class="delete-task" data-id="' + todos[i].id + '">delete</button></td><td>' + todos[i].task + '</td></tr>';
+      tableText += '<tr class="incomplete-row"><td class="complete-column"><button type="button" class="complete-task" data-id="' + todos[i].id + '">complete</button></td><td class="delete-column"><button type="button" class="delete-task" data-id="' + todos[i].id + '">delete</button></td><td class="taskname-column">' + todos[i].task + '</td></tr>';
     }
   }
   // And then the lists are concatenated and put on the DOM.

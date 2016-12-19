@@ -2,25 +2,25 @@ body {
   font: 12pt arial, sans-serif;
 }
 
-input, textarea {
-  display: block;
+input {
+  display: inline;
+  width: 300px;
 }
 
 table {
   border-collapse: collapse;
 }
 
-th {
-  background-color: darkslategray;
-  color: white;
-  text-indent: 20px;
-  padding: 5px;
+tr {
+  border-bottom: 1px solid #fff;
 }
 
 td {
-  border-bottom: 1px solid #ddd;
-  text-align: left;
   padding: 5px;
+}
+
+.table-frame {
+  width: 450px;
 }
 
 .taskname-column {
@@ -37,5 +37,14 @@ td {
 }
 
 input, button {
-  font-size: 16.2px;
+  font-size: 16px;
+}
+
+#check-if-ok {
+  background-color: lightsalmon;
+  padding: 5px;
+}
+
+.row-to-be-deleted {
+  background-color: lightsalmon;
 }

@@ -13,6 +13,13 @@
     <input type="text" id="addTaskInput">
     <button type="button" id="addTaskButton">Add task</button>
     <h2>List of Tasks:</h2>
-    <table id="taskTable"></table>
+    <div class="table-frame">
+      <div id="check-if-ok">
+        Are you sure you want to delete this task?
+        <button type="button" id="yes-ok">yes</button>
+        <button type="button" id="not-ok">no</button>
+      </div>
+      <table id="taskTable"></table>
+    </div>
   </body>
 </html>
