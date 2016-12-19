@@ -34,6 +34,7 @@ $(document).on('click', '#addTaskButton', function(){
   var newTaskObject = {task: $('#addTaskInput').val()};
   var addToDo = $.post('/todos/addToDo', newTaskObject);
   $.when(addToDo).done(refreshDisplay);
+  $('#addTaskInput').val('');
 });
 
 $(document).on('click', '.delete-task', function(){
@@ -65,12 +66,13 @@ $(document).on('click', '.complete-task', function(){
 var refreshDisplay = function(){
   /* Refreshes to-do list on DOM; called on document.ready, and then again
   after any database modification.
+
   Chaining $.ajax with .Deferred methods (such as .done and .then) will
   pipe the response of the AJAX call to the next function. So my $.get call
   is super simple, and I don't need to declare arguments in the .done
   statement (even though the callback displayToDos has one argument). This
-  actually also allowed be to eliminate the global to-do-array variable
-  I expected to need; this is the only place I need the whole array.*/
+  actually also allowed me to eliminate the global to-do-array variable
+  I expected to need; this is the only place I need the whole to-do array.*/
   var getTodos = $.get('/todos/allTodos');
   $.when(getTodos).done(displayToDos);
 };
