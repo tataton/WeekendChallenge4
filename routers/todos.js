@@ -18,12 +18,11 @@ router.get('/allTodos', function(req, res){
       var query = client.query('SELECT * FROM todos');
       query.on('row', function(row){
         allTodos.push(row);
-      }); // end query
+      });
       query.on('end', function(){
-        done();
+        done();               // Close postgres connection.
         console.log(allTodos);
-        //send a response
-        res.send({toDoArray: allTodos});
+        res.status(200).send({toDoArray: allTodos});
       });
     }
   });
@@ -31,18 +30,44 @@ router.get('/allTodos', function(req, res){
 
 router.post('/addToDo', urlEncodedParser, function(req, res){
   console.log('In addToDo. To-Do to add: ', req.body);
-  //connect to db
   pg.connect(connectionString, function(err, client, done) {
     if (err) {
       console.log(err);
     } else {
       console.log('Connected to database from addToDo.');
       client.query('INSERT INTO todos (task) VALUES ($1);', [req.body.task]);
-      done();
-      res.send({response: 'addToDo Complete.'});
+      done();               // Close postgres connection.
+      res.sendStatus(201);  // Close AJAX.
     }
   });
 });
 
+router.put('/completeToDo', urlEncodedParser, function(req, res){
+  console.log('In completeToDo. To-Do to complete: ', req.body);
+  pg.connect(connectionString, function(err, client, done) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Connected to database from completeToDo.');
+      client.query('UPDATE todos SET complete=true WHERE id=$1;', [req.body.id]);
+      done();               // Close postgres connection.
+      res.sendStatus(200);  // Close AJAX.
+    }
+  });
+});
+
+router.delete('/deleteToDo', urlEncodedParser, function(req, res){
+  console.log('In deleteToDo. To-Do to delete: ', req.body);
+  pg.connect(connectionString, function(err, client, done) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Connected to database from deleteToDo.');
+      client.query('DELETE FROM todos WHERE id=$1;', [req.body.id]);
+      done();               // Close postgres connection.
+      res.sendStatus(200);  // Close AJAX.
+    }
+  });
+});
 
 module.exports = router;
