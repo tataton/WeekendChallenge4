@@ -91,7 +91,7 @@ var displayToDos = function(responseOfGet){
   for (var i = (todos.length - 1); i >= 0; i--) {
     if (todos[i].complete) {
       // If task is already completed, it's added to the list of completed tasks.
-      completedText += '<tr class="completed-row"><td></td><td><button type="button" class="delete-task" data-id="' + todos[i].id + '">delete</button></td><td>' + todos[i].task + '</td></tr>';
+      completedText += '<tr class="completed-row"><td class="complete-column">&#10004;</td><td><button type="button" class="delete-task" data-id="' + todos[i].id + '">delete</button></td><td>' + todos[i].task + '</td></tr>';
     } else {
       // Otherwise, the task is incomplete, and added to the other list.
       tableText += '<tr class="incomplete-row"><td><button type="button" class="complete-task" data-id="' + todos[i].id + '">complete</button></td><td><button type="button" class="delete-task" data-id="' + todos[i].id + '">delete</button></td><td>' + todos[i].task + '</td></tr>';
