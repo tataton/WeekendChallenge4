@@ -8,3 +8,4 @@ complete BOOLEAN DEFAULT true
 );
 
 INSERT INTO todos (task) VALUES ('Finish this program.');
+INSERT INTO todos (task, complete) VALUES ('Learn about Promises.', true);
