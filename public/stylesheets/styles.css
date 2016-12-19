@@ -1,0 +1,41 @@
+body {
+  font: 12pt arial, sans-serif;
+}
+
+input, textarea {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  background-color: darkslategray;
+  color: white;
+  text-indent: 20px;
+  padding: 5px;
+}
+
+td {
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  padding: 5px;
+}
+
+.taskname-column {
+  width: 300px;
+  text-align: left;
+}
+
+.complete-column, .delete-column {
+  text-align: center;
+}
+
+.completed-row {
+  background-color: palegreen;
+}
+
+input, button {
+  font-size: 16.2px;
+}
