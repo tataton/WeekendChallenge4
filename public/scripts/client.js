@@ -16,15 +16,21 @@ $.when(newPromise).done(whatComesAfter);        // When the action is done,
                                                    do whatComesAfter.
 
 This way, the new Promise is created in a new variable declaration, which
-binds it to its local scope and prevents it from being re-used. I am still
-learning about these though, and if I screwed it up, I'm definitely looking
-for input. So far they seem to work.
+binds it to its local scope and prevents it from being re-used. Chaining
+$.ajax with .Deferred methods (such as .done and .then) will pipe the
+response of the AJAX call to the next function. So my $.ajax calls
+are super simple, and I don't need to declare arguments in the .done
+statement (even though the callback has one argument).
+
+I am still learning about these though, and if I screwed it up, I'm
+definitely looking for input. So far they seem to work.
 
 I have also started to use $.get and $.post in place of $.ajax for those
 two HTTP methods for simplicity. Oddly, there is no $.put or $.delete in
 jQuery, so I'm still using $.ajax for those. */
 
 $(document).ready(function(){
+  // Hide dialog that checks whether deleting item is okay.
   $('#check-if-ok').hide();
   refreshDisplay();
 });
@@ -45,19 +51,27 @@ $(document).on('click', '.delete-task', function(){
   on the DOM. */
   var toDeleteID = $(this).data('id');
   var $rowToBeDeleted = $(this).parent().parent();
+  // Turn row to be deleted salmon pink. Just cuz.
   $rowToBeDeleted.addClass('row-to-be-deleted');
+  // Reveal dialog that checks if deleting is okay. It's pink too.
   $('#check-if-ok').show();
+  // If it is okay,
   $('#yes-ok').on('click', function(){
+    // Delete the task,
     var deleteTask = $.ajax('/todos/deleteToDo', {
       data: {id: toDeleteID},
       method: 'DELETE'
     });
     $.when(deleteTask).done(refreshDisplay);
+    // And hide the dialog again.
     $('#check-if-ok').hide();
   });
+  // Otherwise, if it's not okay,
   $('#not-ok').on('click', function(){
+    // Hide the dialog box again,
     $('#check-if-ok').hide();
-      $rowToBeDeleted.removeClass('row-to-be-deleted');
+    // And turn the row from pink back to its original color.
+    $rowToBeDeleted.removeClass('row-to-be-deleted');
   });
 });
 
@@ -76,14 +90,7 @@ $(document).on('click', '.complete-task', function(){
 
 var refreshDisplay = function(){
   /* Refreshes to-do list on DOM; called on document.ready, and then again
-  after any database modification.
-
-  Chaining $.ajax with .Deferred methods (such as .done and .then) will
-  pipe the response of the AJAX call to the next function. So my $.get call
-  is super simple, and I don't need to declare arguments in the .done
-  statement (even though the callback displayToDos has one argument). This
-  actually also allowed me to eliminate the global to-do-array variable
-  I expected to need; this is the only place I need the whole to-do array.*/
+  after any database modification. */
   var getTodos = $.get('/todos/allTodos');
   $.when(getTodos).done(displayToDos);
 };

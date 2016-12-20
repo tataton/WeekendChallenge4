@@ -2,6 +2,10 @@ body {
   font: 12pt arial, sans-serif;
 }
 
+input, button {
+  font-size: 16px;
+}
+
 input {
   display: inline;
   width: 300px;
@@ -16,6 +20,11 @@ tr {
 }
 
 td {
+  padding: 5px;
+}
+
+#check-if-ok {
+  background-color: lightsalmon;
   padding: 5px;
 }
 
@@ -34,15 +43,6 @@ td {
 
 .completed-row {
   background-color: palegreen;
-}
-
-input, button {
-  font-size: 16px;
-}
-
-#check-if-ok {
-  background-color: lightsalmon;
-  padding: 5px;
 }
 
 .row-to-be-deleted {
